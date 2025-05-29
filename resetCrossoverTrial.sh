@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 
-CROSSOVER_PATH="/Applications/CrossOver.app/Contents/MacOS"
+BOTTLES_PATH="$HOME/Library/Application Support/CrossOver/Bottles"
+echo "Enter the path to your CrossOver bottles (default: $HOME/Library/Application Support/CrossOver/Bottles). Press enter for default."
+read -p "> " input_bottles_path
+# Check if the input is empty and use the default path if so
+if [ -n "$input_bottles_path" ]; then
+    BOTTLES_PATH="$input_bottles_path"
+fi
+BOTTLES_PATH="${BOTTLES_PATH}/*"
 
 # Kill CrossOver processes
 while true; do
@@ -41,7 +48,8 @@ while true; do
 done
 
 # Reset trial start date of the bottles
-for i in ~/Library/Application\ Support/CrossOver/Bottles/*; do
+IFS=$'\n'
+for i in `find $BOTTLES_PATH -type d -maxdepth 0`; do
     while true; do
         echo "Checking $i"
         if [ -d "$i" ]; then

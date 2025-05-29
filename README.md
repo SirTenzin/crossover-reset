@@ -1,7 +1,7 @@
 # crossover-trial-renew  
 
-A tool which resets the crossover trial in order to achieve using crossover for free.  
-Built upon santaklouse's CrossOver.sh with the latest patch.  
+A tool which resets the crossover trial in order to achieve using crossover for free, practically acting as a way to crack crossover.  
+Built upon santaklouse's CrossOver.sh.  
 
 Run the following command in terminal:  
 
