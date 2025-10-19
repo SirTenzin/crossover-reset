@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 
 BOTTLES_PATH="$HOME/Library/Application Support/CrossOver/Bottles"
-echo "Enter the path to your CrossOver bottles (default: $HOME/Library/Application Support/CrossOver/Bottles). Press enter for default."
-read -p "> " input_bottles_path
-# Check if the input is empty and use the default path if so
-if [ -n "$input_bottles_path" ]; then
-    BOTTLES_PATH="$input_bottles_path"
-fi
 BOTTLES_PATH="${BOTTLES_PATH}/*"
 
 # Kill CrossOver processes
@@ -14,14 +8,15 @@ while true; do
     pids=$(pgrep -f "CrossOver")
 
     unique_pids=()
-    for pid in "${pids[@]}"; do
-        if [[ -n "$pid" && ! " ${unique_pids[@]} " =~ " ${pid} " ]]; then
+    for pid in $pids; do
+        # shellcheck disable=SC2076
+        if [[ -n "$pid" && ! " ${unique_pids[*]} " =~ " $pid " ]]; then
             unique_pids+=("$pid")
         fi
     done
 
     if [ ${#unique_pids[@]} -gt 0 ]; then
-        echo "Killing CrossOver processes: ${unique_pids[@]}"
+        echo "Killing CrossOver processes: ${unique_pids[*]}"
         kill -9 "${unique_pids[@]}" >/dev/null 2>&1
     else
         echo "No CrossOver processes found."
@@ -38,7 +33,7 @@ while true; do
         sleep 0.3
         plutil -remove FirstRunDate ~/Library/Preferences/com.codeweavers.CrossOver.plist
     fi
-    
+
     sleep 1
 
     if ! /usr/libexec/PlistBuddy -c "Print :FirstRunDate" ~/Library/Preferences/com.codeweavers.CrossOver.plist &>/dev/null; then
@@ -49,7 +44,8 @@ done
 
 # Reset trial start date of the bottles
 IFS=$'\n'
-for i in `find $BOTTLES_PATH -type d -maxdepth 0`; do
+# shellcheck disable=SC2086
+find $BOTTLES_PATH -type d -maxdepth 0 | while IFS= read -r i; do
     while true; do
         echo "Checking $i"
         if [ -d "$i" ]; then
