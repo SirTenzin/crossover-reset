@@ -16,7 +16,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/av1155/crossover-reset/r
 To automatically reset the trial every 13 days, set up a cron job:
 
 1. Open crontab: `crontab -e`
-2. Add the following line (runs daily at 2 AM):
+1. Add the following line (runs daily at 2 AM):
    ```
    0 2 * * * /bin/bash -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/av1155/crossover-reset/refs/heads/main/crossover-reset-scheduler.sh)"
    ```
