@@ -1,6 +1,6 @@
-# crossover-trial-renew
+# crossover-reset
 
-A tool which resets the crossover trial in order to achieve using crossover for free, practically acting as a way to crack crossover.  
+A tool which resets the crossover start day.  
 Built upon santaklouse's CrossOver.sh.
 
 ## Manual Reset
@@ -13,7 +13,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/av1155/crossover-reset/r
 
 ## Automated Reset (Cron Job)
 
-To automatically reset the trial every 13 days, set up a cron job with `crossover-reset-scheduler.sh`:
+To automatically reset Crossover every 13 days, set up a cron job with `crossover-reset-scheduler.sh`:
 
 1. Clone this repository
 1. Make the scheduler executable: `chmod +x crossover-reset-scheduler.sh`
@@ -23,3 +23,5 @@ To automatically reset the trial every 13 days, set up a cron job with `crossove
     ```cron
     0 5 * * * '/path/to/crossover-reset/crossover-reset-scheduler.sh > /path/to/crossover-reset/logs/reset-crossover.log 2>&1'
     ```
+
+> Cloning the repo is necessary because the scheduler writes a temporary file to track the last time it was run.
