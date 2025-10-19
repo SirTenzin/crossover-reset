@@ -8,7 +8,7 @@ STATE_FILE="$SCRIPT_DIR/.reset-crossover.last"
 # 13 days in seconds
 THRESHOLD=$((13 * 24 * 60 * 60))
 
-URL="https://raw.githubusercontent.com/av1155/crossover-reset/refs/heads/main/resetCrossoverTrial.sh"
+URL="https://raw.githubusercontent.com/av1155/crossover-reset/refs/heads/main/reset-crossover.sh"
 
 now=$(date +%s)
 last=0
