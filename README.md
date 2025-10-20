@@ -21,7 +21,7 @@ To automatically reset Crossover every 13 days, set up a cron job with `crossove
 1. Add the following line (runs daily at 5 AM):
 
     ```cron
-    0 5 * * * '/path/to/crossover-reset/crossover-reset-scheduler.sh > /path/to/crossover-reset/logs/reset-crossover.log 2>&1'
+    0 5 * * * mkdir -p /path/to/crossover-reset/logs && /usr/bin/env bash /path/to/crossover-reset/crossover-reset-scheduler.sh > /path/to/crossover-reset/logs/reset-crossover.log 2>&1
     ```
 
 > Cloning the repo is necessary because the scheduler writes a temporary file to track the last time it was run.
