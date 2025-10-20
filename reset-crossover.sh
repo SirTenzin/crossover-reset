@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+START_TIME=$(date +%s)
+
+echo "========================================"
+echo "CrossOver Reset Script"
+echo "Started: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "========================================"
+
 BOTTLES_PATH="$HOME/Library/Application Support/CrossOver/Bottles"
 BOTTLES_PATH="${BOTTLES_PATH}/*"
 
@@ -62,3 +69,12 @@ find $BOTTLES_PATH -type d -maxdepth 0 | while IFS= read -r bottle; do
 done
 
 /usr/bin/osascript -e "display notification \"Crossover Trial Updated\""
+
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+echo "========================================"
+echo "CrossOver Reset Completed"
+echo "Finished: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "Duration: ${DURATION} seconds"
+echo "========================================"
