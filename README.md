@@ -1,7 +1,7 @@
 # crossover-reset
 
 A tool which resets the crossover start day.  
-Built upon santaklouse's CrossOver.sh.
+Built upon santaklouse's CrossOver.sh and Nygosaki's implementation.
 
 ## Manual Reset
 
@@ -24,3 +24,5 @@ To automatically reset Crossover every 13 days, set up a cron job with `crossove
     ```cron
     0 5 * * * mkdir -p /path/to/crossover-reset/logs && /usr/bin/env bash /path/to/crossover-reset/crossover-reset-scheduler.sh > /path/to/crossover-reset/logs/reset-crossover.log 2>&1
     ```
+
+    > Replace each occurrence of /path/to/ with your actual absolute path to your cloned repo.
