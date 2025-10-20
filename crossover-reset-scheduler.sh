@@ -4,11 +4,10 @@ set -euo pipefail
 # Paths (relative to this script)
 SCRIPT_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
 STATE_FILE="$SCRIPT_DIR/.reset-crossover.last"
+RESET_SCRIPT="$SCRIPT_DIR/reset-crossover.sh"
 
 # 13 days in seconds
 THRESHOLD=$((13 * 24 * 60 * 60))
-
-URL="https://raw.githubusercontent.com/av1155/crossover-reset/refs/heads/main/reset-crossover.sh"
 
 now=$(date +%s)
 last=0
@@ -25,8 +24,8 @@ if ((last > 0 && (now - last) < THRESHOLD)); then
     exit 0
 fi
 
-# Simple quick run: fetch latest and execute
-/usr/bin/curl -fsSL "$URL" | /bin/bash
+# Execute the local reset script
+/bin/bash "$RESET_SCRIPT"
 
 # Record success time
 printf '%s\n' "$now" >"$STATE_FILE"
