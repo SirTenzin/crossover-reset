@@ -45,16 +45,16 @@ done
 # Reset trial start date of the bottles
 IFS=$'\n'
 # shellcheck disable=SC2086
-find $BOTTLES_PATH -type d -maxdepth 0 | while IFS= read -r i; do
+find $BOTTLES_PATH -type d -maxdepth 0 | while IFS= read -r bottle; do
     while true; do
-        echo "Checking $i"
-        if [ -d "$i" ]; then
-            sed -i '' '/\[Software\\\\CodeWeavers\\\\CrossOver\\\\cxoffice\].*/,+5d' "$i/system.reg"
+        echo "Checking $bottle"
+        if [ -d "$bottle" ]; then
+            sed -i '' '/\[Software\\\\CodeWeavers\\\\CrossOver\\\\cxoffice\].*/,+5d' "$bottle/system.reg"
         fi
 
         sleep 0.3
 
-        if ! grep -q '\[Software\\\\CodeWeavers\\\\CrossOver\\\\cxoffice\]' "$i/system.reg"; then
+        if ! grep -q '\[Software\\\\CodeWeavers\\\\CrossOver\\\\cxoffice\]' "$bottle/system.reg"; then
             echo "Bottle trial reset successful."
             break
         fi
