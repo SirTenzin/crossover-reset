@@ -13,9 +13,27 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/SirTenzin/crossover-rese
 
 ## Automated Reset (Cron Job)
 
-To automatically reset Crossover every 13 days, set up a cron job with `crossover-reset-scheduler.sh`:
+### Quick Setup (Recommended)
 
-1. Clone this repository
+The easiest way to set up automated resets is using the setup script:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/SirTenzin/crossover-reset/refs/heads/main/setup.sh)"
+```
+
+This script will:
+- Clone the repository to `~/Library/Application Support/crossover-reset`
+- Make the necessary scripts executable
+- Set up a cron job that runs daily at 5:00 AM
+- Create a logs directory for tracking resets
+
+The scheduler will automatically reset CrossOver every 13 days.
+
+### Manual Setup
+
+If you prefer to set up manually, follow these steps:
+
+1. Clone this repository to a location of your choice
     > Cloning the repo is necessary because the scheduler writes a temporary file to track the last time it was run.
 1. Make the scheduler executable: `chmod +x crossover-reset-scheduler.sh`
 1. Add to crontab: `crontab -e`
