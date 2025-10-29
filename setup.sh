@@ -45,23 +45,41 @@ mkdir -p "$INSTALL_DIR/logs"
 # Setup cron job
 echo ""
 echo "Setting up cron job..."
+echo "(Note: On macOS, you may be prompted to grant Terminal access to cron)"
 
-# Check if cron job already exists
-CRON_COMMAND="0 5 * * * mkdir -p \"$INSTALL_DIR/logs\" && /usr/bin/env bash \"$INSTALL_DIR/crossover-reset-scheduler.sh\" > \"$INSTALL_DIR/logs/reset-crossover.log\" 2>&1"
+# Build the cron command
+CRON_TIME="0 5 * * *"
+CRON_MKDIR="mkdir -p \"$INSTALL_DIR/logs\""
+CRON_EXEC="/usr/bin/env bash \"$INSTALL_DIR/crossover-reset-scheduler.sh\""
+CRON_LOG="> \"$INSTALL_DIR/logs/reset-crossover.log\" 2>&1"
+CRON_COMMAND="$CRON_TIME $CRON_MKDIR && $CRON_EXEC $CRON_LOG"
 
 # Get current crontab (or empty if none exists)
-CURRENT_CRON=$(crontab -l 2>/dev/null || echo "")
-
-# Check if our cron job is already installed
-if echo "$CURRENT_CRON" | grep -q "crossover-reset-scheduler.sh"; then
-    echo "Cron job already exists. Updating..."
-    # Remove old cron job
-    NEW_CRON=$(echo "$CURRENT_CRON" | grep -v "crossover-reset-scheduler.sh")
-    echo "$NEW_CRON" | crontab -
+if ! CURRENT_CRON=$(crontab -l 2>/dev/null); then
+    CURRENT_CRON=""
 fi
 
-# Add the new cron job
-(echo "$CURRENT_CRON" | grep -v "crossover-reset-scheduler.sh" || true; echo "$CRON_COMMAND") | crontab -
+# Remove any existing crossover-reset-scheduler entries
+if echo "$CURRENT_CRON" | grep -q "crossover-reset-scheduler.sh"; then
+    echo "Updating existing cron job..."
+    CURRENT_CRON=$(echo "$CURRENT_CRON" | grep -v "crossover-reset-scheduler.sh" || true)
+else
+    echo "Adding new cron job..."
+fi
+
+# Create the new crontab with our entry added
+if [ -n "$CURRENT_CRON" ]; then
+    NEW_CRON="$CURRENT_CRON"$'\n'"$CRON_COMMAND"
+else
+    NEW_CRON="$CRON_COMMAND"
+fi
+
+# Install the new crontab
+echo "$NEW_CRON" | crontab - || {
+    echo "Error: Failed to update crontab. You may need to grant Terminal permission to manage cron jobs."
+    echo "On macOS 10.14+, go to: System Settings > Privacy & Security > Full Disk Access"
+    exit 1
+}
 
 echo ""
 echo "========================================"
