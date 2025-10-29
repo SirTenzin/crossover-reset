@@ -62,14 +62,25 @@ fi
 # Remove any existing crossover-reset-scheduler entries
 if echo "$CURRENT_CRON" | grep -q "crossover-reset-scheduler.sh"; then
     echo "Updating existing cron job..."
-    CURRENT_CRON=$(echo "$CURRENT_CRON" | grep -v "crossover-reset-scheduler.sh" || true)
+    # Use a while loop to properly filter out matching lines
+    FILTERED_CRON=""
+    while IFS= read -r line; do
+        if ! echo "$line" | grep -q "crossover-reset-scheduler.sh"; then
+            if [ -n "$FILTERED_CRON" ]; then
+                printf -v FILTERED_CRON "%s\n%s" "$FILTERED_CRON" "$line"
+            else
+                FILTERED_CRON="$line"
+            fi
+        fi
+    done <<< "$CURRENT_CRON"
+    CURRENT_CRON="$FILTERED_CRON"
 else
     echo "Adding new cron job..."
 fi
 
 # Create the new crontab with our entry added
 if [ -n "$CURRENT_CRON" ]; then
-    NEW_CRON="$CURRENT_CRON"$'\n'"$CRON_COMMAND"
+    printf -v NEW_CRON "%s\n%s" "$CURRENT_CRON" "$CRON_COMMAND"
 else
     NEW_CRON="$CRON_COMMAND"
 fi
@@ -77,7 +88,7 @@ fi
 # Install the new crontab
 echo "$NEW_CRON" | crontab - || {
     echo "Error: Failed to update crontab. You may need to grant Terminal permission to manage cron jobs."
-    echo "On macOS 10.14+, go to: System Settings > Privacy & Security > Full Disk Access"
+    echo "On macOS, go to: System Settings (or System Preferences) > Privacy & Security > Full Disk Access"
     exit 1
 }
 
