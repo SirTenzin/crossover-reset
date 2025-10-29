@@ -8,7 +8,7 @@ Built upon santaklouse's CrossOver.sh and Nygosaki's implementation.
 Run the following command in terminal:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/av1155/crossover-reset/refs/heads/main/reset-crossover.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/SirTenzin/crossover-reset/refs/heads/main/reset-crossover.sh)"
 ```
 
 ## Automated Reset (Cron Job)
